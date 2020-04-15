@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://lorax:adminadmin@dev-connector-eflvj.mongodb.net/ingredient?retryWrites=true&w=majority",
+  "jwtSecret": "superSecretToken"
+}
