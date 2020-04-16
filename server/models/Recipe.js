@@ -1,15 +1,32 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-// https://stackoverflow.com/questions/29780733/store-an-image-in-mongodb-using-node-js-express-and-mongoose
+
+// const Ingredient = new Schema({
+//   qty: {
+//     type: Number,
+//   },
+//   ingredient: {
+//     type: String,
+//   },
+// });
+
+// const IngredientCategory = new Schema({
+//   category: [{ type: Ingredient }],
+// });
+
 const RecipeSchema = new Schema({
   user: {
     type: String,
     required: true,
   },
-  // image: {
-  //   data: Buffer,
-  //   contentType: String,
-  // },
+  username: {
+    type: String,
+    required: true,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
   image: {
     type: String,
     required: true,
@@ -18,7 +35,11 @@ const RecipeSchema = new Schema({
     type: String,
     required: true,
   },
-  ingredients: [{ type: Object, required: true }],
+  ingredients: [
+    {
+      type: Object,
+    },
+  ],
   steps: [
     {
       type: String,
@@ -28,6 +49,7 @@ const RecipeSchema = new Schema({
   likes: [
     {
       type: String,
+      default: [],
     },
   ],
   date: {

@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 const { check, validationResult } = require("express-validator");
 const Recipe = require("../models/Recipe");
+const User = require("../models/User");
 const Comment = require("../models/Comment");
 const auth = require("../middleware/auth");
 const multer = require("multer");
@@ -50,14 +51,19 @@ router.get("/comments", async (req, res) => {
   }
 });
 
-// @route           POST api/recipes/id
+// @route           GET api/recipes/:id
 // @description     Get recipe by id
 // @access          Public
-router.post("/id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
-    const { id } = req.body.id;
-    const recipe = await Recipe.findOne({ id });
-    res.json({ recipe });
+    const id = req.params.id;
+    // const { id } = req.body.id;
+    await Recipe.findById(id, (err, recipe) => {
+      if (err) {
+        res.status(400).send("Unable to find recipe");
+      }
+      res.json({ recipe });
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server error");
@@ -103,48 +109,35 @@ router.post("/", upload.single("file"), async (req, res) => {
   }
   try {
     const data = JSON.parse(req.body.data);
-    const { user, description, ingredients, steps, tags } = data;
+    const { user, title, description, ingredients, steps, tags } = data;
 
     const file = req.file;
 
-    // const recipe = req.body.data;
-
-    // file.mv(`${__dirname}/public/recipes/${file.name}`, error => {
-    //   if (error) {
-    //     console.log(error);
-    //     return res.status(500).send(error);
-    //   }
-    // });
-    // const filePath = `/recipes/${file.name}`;
-    //   const user = await User.findById(req.user.id).select('-password');
+    const userObject = await User.findById(user).select("-password");
+    const username = userObject.name;
 
     // TODO Next issue, id
     const recipe = new Recipe({
       user,
+      username,
+      title,
       description,
       ingredients,
       steps,
       tags,
+      image: file.filename,
     });
 
-    // const imageName = `${recipe.id}.${fileExtension}`;
-    // recipe.image = imageName;
-    // file.fieldname = imageName;
-    // file.path = `public/images/recipes/${imageName}`;
-
-    const fileExtension = file.originalname.split(".")[
-      file.originalname.split(".").length - 1
-    ];
-    const imageName = `${file.filename}.${fileExtension}`;
-    recipe.image = imageName;
-
     try {
-      // fs.writeFile(imageName, file);
-      req.send(file);
+      try {
+        req.send(file);
+      } catch (error) {
+        console.log(error);
+      }
       await recipe.save();
-      res.json({ msg: "Recipe saved successfully" });
+      res.json({ msg: "Recipe saved sucessfully" });
     } catch (error) {
-      res.json({ msg: "Invalid recipe" });
+      res.status(400).send("Bad request");
     }
   } catch (error) {
     console.error(error.message);
@@ -260,18 +253,18 @@ router.post("/comments/commentid", auth, async (req, res) => {
   }
 });
 
-// @route           DELETE api/recipes/id
+// @route           DELETE api/recipes/:id
 // @description     Delete recipe by id
 // @access          Private
-router.delete("/id", auth, async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
-    const { id } = req.body;
-    const recipe = await Recipe.findById({ id });
+    const id = req.params.id;
+    const recipe = await Recipe.findById(id);
     if (!recipe) {
       return res.status(404).json({ msg: "Recipe not found" });
     }
     if (recipe.user === req.user.id) {
-      recipeid = recipe.id;
+      const recipeid = recipe.id;
       await Recipe.findOneAndRemove({ _id: recipeid });
       res.json({ msg: "Recipe successfully deleted" });
     } else {
