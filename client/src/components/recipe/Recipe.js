@@ -10,8 +10,8 @@ const useStyles = makeStyles({
   container: {
     padding: "1rem 5rem",
     margin: "auto",
-    maxWidth: "70rem"
-  }
+    maxWidth: "70rem",
+  },
 });
 
 const init = () => {

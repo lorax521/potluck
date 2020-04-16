@@ -7,6 +7,7 @@ import description from "./description";
 import tags from "./tags";
 import image from "./image";
 import auth from "./auth";
+import getrecipe from "./getrecipe";
 
 export default combineReducers({
   steps,
@@ -16,5 +17,6 @@ export default combineReducers({
   description,
   tags,
   image,
-  auth
+  auth,
+  getrecipe,
 });

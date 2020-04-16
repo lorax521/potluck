@@ -12,70 +12,94 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ShareIcon from "@material-ui/icons/Share";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+import { getRecipe } from "../../actions/getrecipe";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles({
   card: {
     width: 300,
-    margin: "1rem"
+    margin: "1rem",
   },
   cardMedia: {
-    height: 300
+    height: 300,
   },
   cardTitle: {
     position: "absolute",
     bottom: "-17px",
     color: "#fff",
-    textShadow: "2px 2px 10px #ff0000"
+    textShadow: "1px 1px 2px #ff0000",
   },
   cardActions: {
     padding: 0,
-    display: "inline"
+    display: "inline",
   },
   icon: {
-    color: "#648dae"
+    color: "#648dae",
   },
   iconFavorite: {
-    color: "#ff0000"
+    color: "#ff0000",
   },
   iconsvg: { fontSize: "1.5rem" },
   top: {
     display: "flex",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   bottom: {
-    display: "flex"
+    display: "flex",
   },
   actionContent: {
     display: "flex",
     alignItems: "center",
-    userSelect: "none"
+    userSelect: "none",
   },
   actionContentLikes: {
     "&:first-child": {
       margin: "0 0 0 1.5rem",
-      fontWeight: "bold"
+      fontWeight: "bold",
     },
     "&:last-child": {
       margin: "0 0 0 0.5rem",
       textShadow: "2px 2px #ff0000",
-      color: "#ff0000"
-    }
-  }
+      color: "#ff0000",
+    },
+  },
 });
 
-const RecipeCard = props => {
+const RecipeCard = (props) => {
+  {
+    /*
+  Required props: 
+    id: String -- recipe id
+    title: String -- card title
+    image: String -- link to image
+    user: String -- user name
+    likes: Number -- length of the likes array
+  */
+  }
+
   const classes = useStyles();
+
+  // <Link to="/recipe">
+  //   <CardMedia
+  //     className={classes.cardMedia}
+  //     image={`/images/recipes/${props.image}`}
+  //     title={props.title}
+  //   />
+  // </Link>
+
+  const onClick = () => {
+    console.log(props.id);
+    props.getRecipe(props.id);
+  };
 
   return (
     <Card className={classes.card} elevation={3}>
-      <CardActionArea>
-        <Link to="/recipe">
-          <CardMedia
-            className={classes.cardMedia}
-            image={props.img}
-            title="Contemplative Reptile"
-          />
-        </Link>
+      <CardActionArea onClick={onClick}>
+        <CardMedia
+          className={classes.cardMedia}
+          image={`/images/recipes/${props.image}`}
+          title={props.title}
+        />
         <CardContent className={classes.cardTitle}>
           <Typography gutterBottom variant="h5" component="h2">
             {props.title}
@@ -85,7 +109,7 @@ const RecipeCard = props => {
       <CardActions className={classes.cardActions}>
         <div className={classes.top}>
           <div className={classes.actionContent}>
-            <p className={classes.actionContentLikes}>47</p>
+            <p className={classes.actionContentLikes}>{props.likes}</p>
             <FavoriteBorderIcon className={classes.actionContentLikes} />
           </div>
           <div>
@@ -118,4 +142,4 @@ const RecipeCard = props => {
   );
 };
 
-export default RecipeCard;
+export default connect(null, { getRecipe })(RecipeCard);

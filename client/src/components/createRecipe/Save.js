@@ -26,7 +26,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Save = ({ recipe, saveRecipe }) => {
+const Save = ({ saveRecipe }) => {
   // TODO add validation
   const classes = useStyles();
 

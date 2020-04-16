@@ -18,3 +18,4 @@ export const LOG_IN = "LOG_IN";
 export const LOG_OUT = "LOG_OUT";
 export const ACCOUNT_CREATED = "ACCOUNT_CREATED";
 export const SAVE_RECIPE = "SAVE_RECIPE";
+export const GET_RECIPE = "GET_RECIPE";

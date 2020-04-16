@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import RecipeCard from "./RecipeCard";
 import { makeStyles } from "@material-ui/core/styles";
-import ReactPaginate from "react-paginate";
-import { recipes } from "./testdata";
+import axios from "axios";
 
 import "../../App.css";
 
@@ -11,67 +10,47 @@ const useStyles = makeStyles({
     padding: "1rem 4rem",
     display: "flex",
     position: "relative",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   recipes: {
     margin: "auto",
     display: "flex",
     flexFlow: "row wrap",
     position: "relative",
-    justifyContent: "center"
-  }
+    justifyContent: "center",
+  },
 });
 
-const numberOfRecipes = recipes.length;
-const recipesPerPage = 12;
-const pageCount = Math.ceil(numberOfRecipes / recipesPerPage);
-
 const Search = () => {
-  let [recipeCards, setRecipeCards] = useState([]);
+  let [recipes, setRecipes] = useState([]);
 
-  const handlePagination = pagination => {
-    recipeCards = [];
-    const page = pagination.selected;
-    const bottom = page * recipesPerPage;
-    const top = bottom + recipesPerPage;
-    for (const recipe in recipes) {
-      const index = parseInt(recipe);
-      if (index >= bottom && index < top) {
-        recipeCards.push(
+  const initRecipes = () => {
+    axios.get("api/recipes").then((res) => {
+      const data = res.data.recipes;
+      const newRecipes = [];
+      data.forEach((recipe) => {
+        newRecipes.push(
           <RecipeCard
-            title={recipes[recipe].title}
-            user={recipes[recipe].user}
-            img={recipes[recipe].img}
+            id={recipe._id}
+            title={recipe.title}
+            user={recipe.username}
+            image={recipe.image}
+            likes={recipe.likes.length}
           />
         );
-      }
-    }
-    setRecipeCards(recipeCards);
-    window.scrollTo(0, 0);
-    // window.scrollTo({top: 0, behavior: 'smooth'});
+      });
+      setRecipes([...recipes, newRecipes]);
+    });
   };
 
   useEffect(() => {
-    handlePagination({ selected: 0 });
+    initRecipes();
   }, []);
 
   const classes = useStyles();
   return (
     <div className={classes.container}>
-      <div className={classes.recipes}>{recipeCards}</div>
-      <ReactPaginate
-        previousLabel={"previous"}
-        nextLabel={"next"}
-        breakLabel={"..."}
-        breakClassName={"break-me"}
-        pageCount={pageCount}
-        marginPagesDisplayed={2}
-        pageRangeDisplayed={5}
-        onPageChange={handlePagination}
-        containerClassName={"pagination"}
-        subContainerClassName={"pages pagination"}
-        activeClassName={"active"}
-      />
+      <div className={classes.recipes}>{recipes}</div>
     </div>
   );
 };

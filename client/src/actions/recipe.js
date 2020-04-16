@@ -31,11 +31,15 @@ export const saveRecipe = () => async (dispatch) => {
 
     const res = await axios.post("api/recipes", formData, headers);
     console.log({ response: res });
+    //  TODO add alert for success
+    alert("Recipe saved successfully!");
     dispatch({
       type: SAVE_RECIPE,
       payload: res.data,
     });
   } catch (error) {
     console.log({ msg: "There was an error saving the recipe" });
+    //  TODO add alert for failure
+    alert("Unable to save recipe. Please ensure you've filled out all fields");
   }
 };
