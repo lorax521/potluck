@@ -5,7 +5,7 @@ const config = require("config");
 
 module.exports = function (req, res, next) {
   // get token from the header
-  const token = req.header("auth-token");
+  const token = req.header("x-auth-token");
 
   // check if no token
   if (!token) {

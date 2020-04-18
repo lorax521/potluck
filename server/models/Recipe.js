@@ -40,6 +40,10 @@ const RecipeSchema = new Schema({
       type: Object,
     },
   ],
+  servings: {
+    type: Number,
+    required: true,
+  },
   steps: [
     {
       type: String,

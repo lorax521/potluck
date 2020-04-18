@@ -57,7 +57,6 @@ router.get("/comments", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    // const { id } = req.body.id;
     await Recipe.findById(id, (err, recipe) => {
       if (err) {
         res.status(400).send("Unable to find recipe");
@@ -70,15 +69,13 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// @route           POST api/recipes/comments
+// @route           GET api/recipes/comments/:id
 // @description     Get recipe comments by recipe id
 // @access          Public
-router.post("/comments/recipeid", async (req, res) => {
+router.get("/comments/:id", async (req, res) => {
   try {
-    const { id } = req.body;
-    console.log(id);
+    const id = req.params.id;
     const comments = await Comment.find({ recipe: id });
-    console.log(comments);
     res.json({ comments });
   } catch (error) {
     console.error(error.message);
@@ -109,7 +106,15 @@ router.post("/", upload.single("file"), async (req, res) => {
   }
   try {
     const data = JSON.parse(req.body.data);
-    const { user, title, description, ingredients, steps, tags } = data;
+    const {
+      user,
+      title,
+      description,
+      servings,
+      ingredients,
+      steps,
+      tags,
+    } = data;
 
     const file = req.file;
 
@@ -120,6 +125,7 @@ router.post("/", upload.single("file"), async (req, res) => {
     const recipe = new Recipe({
       user,
       username,
+      servings,
       title,
       description,
       ingredients,
@@ -164,21 +170,22 @@ router.post("/like", auth, async (req, res) => {
   }
 });
 
-// @route           POST api/recipes/comment
+// @route           POST api/recipes/comments
 // @description     Comment on a recipe
 // @access          Private
-router.post("/comments", auth, async (req, res) => {
+// TODO add auth
+router.post("/comments", async (req, res) => {
   try {
-    const { id, text } = req.body;
-    userid = req.user.id;
+    const { id, user, username, comment } = req.body;
 
-    comment = new Comment({
+    const newComment = new Comment({
       recipe: id,
-      user: userid,
-      text,
+      user,
+      username,
+      comment,
     });
 
-    await comment.save();
+    await newComment.save();
     res.json({ msg: "Recipe comment posted successfully" });
   } catch (error) {
     console.error(error.message);

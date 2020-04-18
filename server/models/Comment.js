@@ -4,16 +4,19 @@ Schema = mongoose.Schema;
 const CommentSchema = new Schema({
   recipe: {
     type: Schema.Types.ObjectId,
-    ref: "recipe"
+    ref: "recipe",
   },
   user: {
     type: Schema.Types.ObjectId,
-    ref: "user"
+    ref: "user",
   },
-  text: {
+  username: {
     type: String,
-    required: true
-  }
+  },
+  comment: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("comment", CommentSchema);
