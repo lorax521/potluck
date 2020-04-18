@@ -10,45 +10,51 @@ const useStyles = makeStyles({
   recipeHeader: {
     display: "flex",
     justifyContent: "space-between",
-    margin: "1rem 0"
+    margin: "1em 0 2em 0",
   },
   follow: {
     fontWeight: "bold",
-    borderRadius: "50px"
+    borderRadius: "50px",
   },
   iconFavorite: {
     color: "#fff",
     background: "#ff0000",
     padding: "0.5rem",
-    marginRight: "1rem"
+    marginRight: "1rem",
+    "&::hover": {
+      background: "#dc0000",
+    },
   },
   iconShare: {
     color: "#fff",
     background: "#2c98f0",
-    padding: "0.5rem"
+    padding: "0.5rem",
+    "&::hover": {
+      background: "#258bde",
+    },
   },
   iconsvg: { fontSize: "1.5rem" },
   servings: {
     display: "flex",
     alignItems: "center",
-    margin: "2rem 0"
+    margin: "2rem 0",
   },
   usercontainer: {
-    display: "flex"
+    display: "flex",
   },
   user: {
-    marginRight: "1rem"
+    marginRight: "1rem",
   },
   iconUserButton: {
     margin: 0,
     padding: 0,
-    marginRight: "0.5rem"
+    marginRight: "0.5rem",
   },
   iconUser: {
     fontSize: "2.5rem",
     padding: 0,
-    margin: 0
-  }
+    margin: 0,
+  },
 });
 
 const RecipeHeader = () => {

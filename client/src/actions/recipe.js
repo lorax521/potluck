@@ -15,9 +15,8 @@ export const saveRecipe = () => async (dispatch) => {
       steps: state.steps,
       image: state.image,
     };
-    // const headers = {
-    //   "Content-Type": "multipart/form-data"
-    // };
+    console.log(recipe);
+
     const headers = {
       "Content-Type": "application/json",
     };

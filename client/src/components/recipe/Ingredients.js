@@ -13,50 +13,80 @@ const useStyles = makeStyles({
   servings: {
     display: "flex",
     alignItems: "center",
-    margin: "2rem 0"
+    margin: "2rem 0",
+  },
+  root: {
+    marginBottom: "2em",
   },
   sectionTitle: {
-    color: "#757575",
+    color: "#6f732f",
+    textTransform: "uppercase",
     paddingBottom: "1rem",
-    borderBottom: "1px solid #757575"
+    borderBottom: "2px solid #e9e9e9",
   },
   category: {
-    margin: 0
+    marginRight: "2.5em",
   },
-  ingredients: {},
-  ingredientColumn: {
-    margin: "0 1rem"
+  categoryTitle: {
+    color: "#a1a1a1",
+    textTransform: "uppercase",
+    margin: "0 0.5em -1.66em 0.5em",
+    background: "#fff",
+    display: "table",
+    position: "relative",
+    padding: "0 0.5em",
   },
   ingredientsList: {
-    display: "flex"
-  }
+    display: "flex",
+  },
+  ingredients: {
+    padding: "1.5em 0em 0em 1em",
+    display: "grid",
+    gridAutoFlow: "column",
+    gridTemplateRows: "repeat(6, auto)",
+    border: "2px solid #e9e9e9",
+    borderRadius: "5px",
+    marginBottom: 0,
+  },
+  ingredient: {
+    listStyle: "none",
+    margin: "0 1.5em 1em 0",
+  },
 });
 
-const Ingredients = () => {
+const Ingredients = ({ servings, ingredients }) => {
   const classes = useStyles();
 
-  const ingredientsComponents = [];
-  for (const category in ingredients) {
-    const categoryComponents = [];
-    categoryComponents.push(<h4 className={classes.category}>{category}</h4>);
-    const section = ingredients[category];
-    for (const ingredient in section) {
-      const qty = section[ingredient].qty;
-      const name = section[ingredient].name;
-      const item = qty + " " + name;
-      categoryComponents.push(<p className={classes.item}>{item}</p>);
-    }
-    ingredientsComponents.push(
-      <div className={classes.ingredientColumn}>{categoryComponents}</div>
+  const IngredientsComponent = ({ ingredients }) => {
+    return (
+      <Fragment>
+        {ingredients
+          ? ingredients.map((obj) => {
+              return (
+                <div className={classes.category}>
+                  <div className={classes.categoryTitle}>{obj.category}</div>
+                  <ul className={classes.ingredients}>
+                    {obj.ingredients.map((ingredient) => (
+                      <li
+                        className={classes.ingredient}
+                      >{`${ingredient.qty} ${ingredient.ingredient}`}</li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })
+          : " "}
+      </Fragment>
     );
-  }
+  };
+
   return (
     <Fragment>
       <div className={classes.servings}>
         <TextField
           label="Servings"
           id="outlined-size-normal"
-          defaultValue="4"
+          defaultValue={servings ? servings : " "}
           variant="outlined"
         />
         <IconButton className={classes.iconServing} aria-label="minus">
@@ -66,12 +96,17 @@ const Ingredients = () => {
           <AddCircleIcon className={classes.iconsvg} />
         </IconButton>
       </div>
-      <div className={classes.ingredients}>
+      <div className={classes.root}>
         <h3 className={classes.sectionTitle}>Ingredients</h3>
-        <div className={classes.ingredientsList}>{ingredientsComponents}</div>
+        <div className={classes.ingredientsList}>
+          <IngredientsComponent ingredients={ingredients} />
+        </div>
       </div>
     </Fragment>
   );
 };
 
+// {props.ingredients.map((obj) => {
+//   return <h4>{obj.category}</h4>;
+// })}
 export default Ingredients;

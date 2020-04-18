@@ -31,6 +31,7 @@ const Save = ({ saveRecipe }) => {
   const classes = useStyles();
 
   const cancel = () => {
+    // TODO add action to clear state for all forms and push / to history
     console.log("canceling");
   };
   const save = async () => {

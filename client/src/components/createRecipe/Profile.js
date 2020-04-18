@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
 import TextField from "@material-ui/core/TextField";
@@ -96,10 +96,10 @@ const names = [
   "Holiday",
 ];
 
-function getStyles(name, personName, theme) {
+function getStyles(name, tagvalues, theme) {
   return {
     fontWeight:
-      personName.indexOf(name) === -1
+      tagvalues.indexOf(name) === -1
         ? theme.typography.fontWeightRegular
         : theme.typography.fontWeightMedium,
   };
@@ -107,6 +107,7 @@ function getStyles(name, personName, theme) {
 
 const Profile = ({
   title,
+  tags,
   description,
   editTitle,
   editDescription,
@@ -114,23 +115,16 @@ const Profile = ({
 }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [personName, setPersonName] = React.useState([]);
+  const [tagsvalues, setTagvalues] = React.useState([]);
+
+  useEffect(() => {
+    setTagvalues([...tags]);
+  }, []);
 
   const handleChange = (e) => {
-    setPersonName(e.target.value);
+    setTagvalues(e.target.value);
     editTags(e.target.value);
   };
-
-  // const handleChangeMultiple = e => {
-  //   const { options } = e.target;
-  //   const value = [];
-  //   for (let i = 0, l = options.length; i < l; i += 1) {
-  //     if (options[i].selected) {
-  //       value.push(options[i].value);
-  //     }
-  //   }
-  //   setPersonName(value);
-  // };
 
   const Tags = () => {
     return (
@@ -141,7 +135,7 @@ const Profile = ({
             labelId="demo-mutiple-chip-label"
             id="demo-mutiple-chip"
             multiple
-            value={personName}
+            value={tagsvalues}
             onChange={handleChange}
             className={classes.category}
             input={<Input id="select-multiple-chip" />}
@@ -158,7 +152,7 @@ const Profile = ({
               <MenuItem
                 key={name}
                 value={name}
-                style={getStyles(name, personName, theme)}
+                style={getStyles(name, tagsvalues, theme)}
               >
                 {name}
               </MenuItem>
@@ -176,6 +170,7 @@ const Profile = ({
         <TextField
           id="outlined-basic"
           label="Recipe Title"
+          defaultValue={title}
           variant="outlined"
           size="small"
           onChange={(e) => editTitle(e.target.value)}
@@ -209,7 +204,8 @@ Profile.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  title: state.servings,
+  title: state.title,
+  tags: state.tags,
   description: state.description,
 });
 

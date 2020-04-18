@@ -12,8 +12,6 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ShareIcon from "@material-ui/icons/Share";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
-import { getRecipe } from "../../actions/getrecipe";
-import { connect } from "react-redux";
 
 const useStyles = makeStyles({
   card: {
@@ -65,51 +63,41 @@ const useStyles = makeStyles({
   },
 });
 
-const RecipeCard = (props) => {
-  {
-    /*
-  Required props: 
-    id: String -- recipe id
-    title: String -- card title
-    image: String -- link to image
-    user: String -- user name
-    likes: Number -- length of the likes array
-  */
-  }
-
+const RecipeCard = ({ id, title, user, image, likes }) => {
   const classes = useStyles();
 
   // <Link to="/recipe">
   //   <CardMedia
   //     className={classes.cardMedia}
-  //     image={`/images/recipes/${props.image}`}
-  //     title={props.title}
+  //     image={`/images/recipes/${image}`}
+  //     title={title}
   //   />
   // </Link>
 
-  const onClick = () => {
-    console.log(props.id);
-    props.getRecipe(props.id);
-  };
+  // const onClick = () => {
+  //   getRecipe(id);
+  // };
 
   return (
     <Card className={classes.card} elevation={3}>
-      <CardActionArea onClick={onClick}>
-        <CardMedia
-          className={classes.cardMedia}
-          image={`/images/recipes/${props.image}`}
-          title={props.title}
-        />
+      <CardActionArea>
+        <Link to={`/recipe/${id}`}>
+          <CardMedia
+            className={classes.cardMedia}
+            image={`/images/recipes/${image}`}
+            title={title}
+          />
+        </Link>
         <CardContent className={classes.cardTitle}>
           <Typography gutterBottom variant="h5" component="h2">
-            {props.title}
+            {title}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions className={classes.cardActions}>
         <div className={classes.top}>
           <div className={classes.actionContent}>
-            <p className={classes.actionContentLikes}>{props.likes}</p>
+            <p className={classes.actionContentLikes}>{likes}</p>
             <FavoriteBorderIcon className={classes.actionContentLikes} />
           </div>
           <div>
@@ -134,7 +122,7 @@ const RecipeCard = (props) => {
             <IconButton type="user" className={classes.icon} aria-label="user">
               <AccountCircleIcon className={classes.iconsvg} />
             </IconButton>
-            {props.user}
+            {user}
           </div>
         </div>
       </CardActions>
@@ -142,4 +130,4 @@ const RecipeCard = (props) => {
   );
 };
 
-export default connect(null, { getRecipe })(RecipeCard);
+export default RecipeCard;
