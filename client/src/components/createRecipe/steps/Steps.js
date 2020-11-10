@@ -4,11 +4,11 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import { connect } from "react-redux";
-import { addStep, editStep, removeStep } from "../../../actions/steps";
+import { addStep, editStep } from "../../../actions/steps";
 import Step from "./Step";
 import PropTypes from "prop-types";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   sectionTitle: {
     color: "#757575",
     paddingBottom: "1rem",
@@ -36,12 +36,26 @@ const useStyles = makeStyles({
   },
   addStepField: {
     width: "50rem",
+    [theme.breakpoints.down("sm")]: {
+      width: "85%",
+    },
   },
-});
+}));
 
-const Steps = ({ steps, addStep, editStep, removeStep }) => {
+const Steps = ({ steps, addStep, editStep, editable, editableSteps }) => {
   const classes = useStyles();
   const inputRef = React.useRef();
+
+  const initEditable = () => {
+    if (editable) {
+      steps = editableSteps;
+      steps.map((value, index) => {
+        editStep(value, index);
+      });
+    }
+  };
+
+  initEditable();
 
   const add = () => {
     const step = document.querySelector("#add-step");
@@ -102,14 +116,13 @@ const Steps = ({ steps, addStep, editStep, removeStep }) => {
 Steps.propTypes = {
   addStep: PropTypes.func.isRequired,
   editStep: PropTypes.func.isRequired,
-  removeStep: PropTypes.func.isRequired,
-  steps: PropTypes.object.isRequired,
+  steps: PropTypes.array.isRequired,
+  editableSteps: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   steps: state.steps,
+  editableSteps: state.getrecipe.steps,
 });
 
-export default connect(mapStateToProps, { addStep, editStep, removeStep })(
-  Steps
-);
+export default connect(mapStateToProps, { addStep, editStep })(Steps);

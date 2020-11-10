@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
@@ -21,28 +21,45 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
+import { deactivateEdit } from "../../../actions/edit";
+
 const useStyles = makeStyles((theme) => ({
   container: {
-    padding: "0.5rem 5rem",
+    padding: "0.2rem 0",
     background: "#6f732f",
     borderRadius: 0,
     color: "#fff",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
+    position: "fixed",
+    width: "100%",
+    zIndex: "1000",
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+      padding: 0,
+    },
   },
   link: {
     textDecoration: "none",
   },
   title: {
     color: "#fff",
+    marginLeft: "2em",
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
   },
   search: {
     padding: "2px 4px",
     display: "flex",
     alignItems: "center",
     width: "40vw",
-    // borderRadius: "50px"
+    [theme.breakpoints.down("sm")]: {
+      width: "80vw",
+      padding: 0,
+      margin: "0.5em 0",
+    },
   },
   input: {
     marginLeft: theme.spacing(1),
@@ -61,7 +78,6 @@ const useStyles = makeStyles((theme) => ({
   },
   select: {
     background: "#fff",
-    // borderRadius: "50px",
     "&::before": {
       border: "0 solid #fff",
     },
@@ -72,6 +88,9 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     fontSize: "1.7em",
     color: "#fff",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.5em",
+    },
   },
   loginBtnContainer: {
     display: "flex",
@@ -92,17 +111,39 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "none",
     fontWeight: "bold",
   },
+  navIcons: {
+    display: "flex",
+    alignSelf: "center",
+    [theme.breakpoints.down("sm")]: {
+      position: "fixed",
+      bottom: 0,
+      background: "#6f732f",
+      width: "100%",
+      justifyContent: "space-evenly",
+    },
+  },
+  createContainer: {
+    alignSelf: "center",
+  },
+  createBtn: {
+    margin: "0 2em 0 3em",
+    padding: 0,
+    // marginLeft: "3em",
+    [theme.breakpoints.down("sm")]: {
+      marginLeft: 0,
+    },
+  },
 }));
 
-const Header = ({ isAuthenticated }) => {
+const Header = ({ deactivateEdit }) => {
   const classes = useStyles();
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     category: "All Recipes",
   });
 
   const inputLabel = React.useRef(null);
-  const [labelWidth, setLabelWidth] = React.useState(0);
-  React.useEffect(() => {
+  const [labelWidth, setLabelWidth] = useState(0);
+  useEffect(() => {
     setLabelWidth(inputLabel.current.offsetWidth);
   }, []);
 
@@ -115,7 +156,7 @@ const Header = ({ isAuthenticated }) => {
 
   const NavIcons = () => {
     return (
-      <Fragment>
+      <div className={classes.navIcons}>
         <div>
           <Link to="/">
             <IconButton type="submit" aria-label="home">
@@ -127,14 +168,19 @@ const Header = ({ isAuthenticated }) => {
           </IconButton>
           <UserButton />
         </div>
-        <div>
+        <div className={classes.createContainer}>
           <Link to="/create">
-            <IconButton type="add" aria-label="add">
+            <IconButton
+              onClick={deactivateEdit}
+              type="add"
+              aria-label="add"
+              className={classes.createBtn}
+            >
               <AddCircleOutlineIcon className={classes.icon} />
             </IconButton>
           </Link>
         </div>
-      </Fragment>
+      </div>
     );
   };
 
@@ -219,11 +265,11 @@ const Header = ({ isAuthenticated }) => {
 };
 
 Header.propTypes = {
-  isAuthenticated: PropTypes.bool.isRequired,
+  deactivateEdit: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  isAuthenticated: state.auth.isAuthenticated,
+  editable: state.edit,
 });
 
-export default connect(mapStateToProps, {})(Header);
+export default connect(mapStateToProps, { deactivateEdit })(Header);

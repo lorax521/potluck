@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import TextField from "@material-ui/core/TextField";
@@ -11,6 +11,8 @@ import {
   removeCategory,
   editCategory,
   addIngredient,
+  editIngredientQty,
+  editIngredientIngredient,
 } from "../../../actions/ingredients";
 import PropTypes from "prop-types";
 
@@ -78,9 +80,29 @@ const useStyles = makeStyles({
   },
 });
 
-const Ingredients = ({ ingredients, addCategory }) => {
+const Ingredients = ({
+  editable,
+  editableIngredients,
+  ingredients,
+  addCategory,
+  editCategory,
+  editIngredientQty,
+  editIngredientIngredient,
+}) => {
   const classes = useStyles();
   const inputRef = React.useRef();
+
+  useEffect(() => {
+    if (editable) {
+      ingredients = editableIngredients;
+      ingredients.map((category, index) => {
+        addCategory(category.category, index);
+        category.ingredients.map((ingredient, idx) => {
+          addIngredient(ingredient.qty, ingredient.ingredient, index);
+        });
+      });
+    }
+  }, []);
 
   const add = (e) => {
     const category = e.target.closest("div").querySelectorAll("input")[0];
@@ -140,7 +162,12 @@ const Ingredients = ({ ingredients, addCategory }) => {
         {ingredients.map((item, index) => {
           return (
             <li className={classes.category} key={index}>
-              <Category category={item.category} index={index} />
+              <Category
+                ingredients={ingredients}
+                category={item.category}
+                index={index}
+                editable={editable}
+              />
             </li>
           );
         })}
@@ -152,13 +179,17 @@ const Ingredients = ({ ingredients, addCategory }) => {
 Ingredients.propTypes = {
   addCategory: PropTypes.func.isRequired,
   removeCategory: PropTypes.func.isRequired,
-  editCategory: PropTypes.func.isRequired,
   addIngredient: PropTypes.func.isRequired,
   ingredients: PropTypes.object.isRequired,
+  editableIngredients: PropTypes.object.isRequired,
+  editCategory: PropTypes.func.isRequired,
+  editIngredientQty: PropTypes.func.isRequired,
+  editIngredientIngredient: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   ingredients: state.ingredients,
+  editableIngredients: state.getrecipe.ingredients,
 });
 
 export default connect(mapStateToProps, {
@@ -166,4 +197,6 @@ export default connect(mapStateToProps, {
   removeCategory,
   editCategory,
   addIngredient,
+  editIngredientQty,
+  editIngredientIngredient,
 })(Ingredients);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
@@ -76,6 +76,15 @@ const useStyles = makeStyles((theme) => ({
 const CreateAccount = ({ createAccount, history }) => {
   const classes = useStyles();
 
+  const onLoad = () => {
+    const emailField = document.getElementById("createaccount-username");
+    emailField.focus();
+  };
+
+  useEffect(() => {
+    onLoad();
+  });
+
   const reroute = () => {
     history.push("/login");
   };
@@ -104,6 +113,7 @@ const CreateAccount = ({ createAccount, history }) => {
             variant="outlined"
             size="small"
             className={classes.input}
+            id="createaccount-username"
           />
           <TextField
             label="Email Address"

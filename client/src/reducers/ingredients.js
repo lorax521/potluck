@@ -5,19 +5,20 @@ import {
   EDIT_INGREDIENT_INGREDIENT,
   ADD_CATEGORY,
   EDIT_CATEGORY,
-  REMOVE_CATEGORY
+  REMOVE_CATEGORY,
+  SET_INGREDIENTS,
 } from "../actions/types";
 
 const initialState = [];
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
     case ADD_CATEGORY:
       const obj = {
         category: payload,
-        ingredients: []
+        ingredients: [],
       };
       return [...state, obj];
     case REMOVE_CATEGORY:
@@ -28,7 +29,7 @@ export default function(state = initialState, action) {
     case ADD_INGREDIENT:
       state[payload.index].ingredients.push({
         qty: payload.qty,
-        ingredient: payload.ingredient
+        ingredient: payload.ingredient,
       });
       return [...state];
     case REMOVE_INGREDIENT:
@@ -45,6 +46,8 @@ export default function(state = initialState, action) {
         payload.ingredientIndex
       ].ingredient = payload.value;
       return [...state];
+    case SET_INGREDIENTS:
+      return [...payload];
     default:
       return state;
   }

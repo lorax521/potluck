@@ -9,13 +9,17 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { getRecipe } from "../../actions/getrecipe";
 
-const useStyles = makeStyles({
-  container: {
+const useStyles = makeStyles((theme) => ({
+  root: {
     padding: "1rem 5rem",
     margin: "auto",
-    maxWidth: "70rem",
+    maxWidth: "60em",
+    [theme.breakpoints.down("sm")]: {
+      padding: "1em",
+      width: "auto",
+    },
   },
-});
+}));
 
 const Recipe = ({ recipe, getRecipe }) => {
   const recipeId = window.location.href.split("/")[
@@ -37,11 +41,17 @@ const Recipe = ({ recipe, getRecipe }) => {
     ingredients,
     steps,
     image,
+    user,
   } = recipe;
 
   return (
-    <div className={classes.container}>
-      <RecipeHeader username={username} />
+    <div className={classes.root}>
+      <RecipeHeader
+        username={username}
+        user={user}
+        id={recipeId}
+        likes={likes}
+      />
       <RecipeProfile
         title={title}
         description={description}

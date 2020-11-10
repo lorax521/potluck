@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
   profile: {
     display: "flex",
     justifyContent: "flex-start",
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column-reverse",
+    },
   },
   category: {
     marginBottom: "2rem",
@@ -29,8 +32,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   description: {
-    width: "40rem",
+    width: "100%",
     margin: "1em 0",
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+    },
   },
   sectionHeader: {
     color: "#757575",
@@ -44,6 +50,10 @@ const useStyles = makeStyles((theme) => ({
   profileContent: {
     marginLeft: "5rem",
     maxWidth: "40rem",
+    flex: 1,
+    [theme.breakpoints.down("sm")]: {
+      marginLeft: 0,
+    },
   },
   tags: {
     border: "none",
@@ -106,9 +116,13 @@ function getStyles(name, tagvalues, theme) {
 }
 
 const Profile = ({
+  editable,
   title,
   tags,
   description,
+  editableTitle,
+  editableDescription,
+  editableTags,
   editTitle,
   editDescription,
   editTags,
@@ -116,6 +130,19 @@ const Profile = ({
   const classes = useStyles();
   const theme = useTheme();
   const [tagsvalues, setTagvalues] = React.useState([]);
+
+  const initEditable = () => {
+    if (editable) {
+      title = editableTitle;
+      description = editableDescription;
+      tags = editableTags;
+      editTitle(editableTitle);
+      editDescription(editableDescription);
+      editTags(editableTags);
+    }
+  };
+
+  initEditable();
 
   useEffect(() => {
     setTagvalues([...tags]);
@@ -200,13 +227,20 @@ Profile.propTypes = {
   editDescription: PropTypes.func.isRequired,
   editTags: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
+  tags: PropTypes.array.isRequired,
   description: PropTypes.string.isRequired,
+  editableTitle: PropTypes.string.isRequired,
+  editableTags: PropTypes.array.isRequired,
+  editableDescription: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   title: state.title,
   tags: state.tags,
   description: state.description,
+  editableTitle: state.getrecipe.title,
+  editableTags: state.getrecipe.tags,
+  editableDescription: state.getrecipe.description,
 });
 
 export default connect(mapStateToProps, {

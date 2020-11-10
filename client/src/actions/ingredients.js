@@ -3,10 +3,12 @@ import {
   REMOVE_INGREDIENT,
   EDIT_INGREDIENT_QTY,
   EDIT_INGREDIENT_INGREDIENT,
+  SET_INGREDIENTS,
   ADD_CATEGORY,
   EDIT_CATEGORY,
   REMOVE_CATEGORY,
 } from "./types";
+import store from "../store";
 
 export const addCategory = (category, index) => async (dispatch) => {
   try {
@@ -110,5 +112,17 @@ export const editIngredientIngredient = (
     });
   } catch (error) {
     console.log({ msg: "There was an error adding to the store" });
+  }
+};
+
+export const setIngredients = () => async (dispatch) => {
+  const state = store.getState();
+  try {
+    dispatch({
+      type: SET_INGREDIENTS,
+      payload: state.getRecipe.ingredients,
+    });
+  } catch (error) {
+    console.log({ msg: "There was an error setting ingredients" });
   }
 };

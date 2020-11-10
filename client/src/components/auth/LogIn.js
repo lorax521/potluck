@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
@@ -75,6 +75,15 @@ const useStyles = makeStyles((theme) => ({
 const LogIn = ({ history, login, isAuthenticated }) => {
   const classes = useStyles();
 
+  const onLoad = () => {
+    const emailField = document.getElementById("login-email");
+    emailField.focus();
+  };
+
+  useEffect(() => {
+    onLoad();
+  });
+
   // const cancel = () => {
   //   console.log("canceling");
   // };
@@ -109,6 +118,7 @@ const LogIn = ({ history, login, isAuthenticated }) => {
               variant="outlined"
               size="small"
               className={classes.input}
+              id="login-email"
             />
             <TextField
               label="Password"

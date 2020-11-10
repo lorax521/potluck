@@ -16,15 +16,22 @@ import CreateRecipe from "./components/createRecipe/CreateRecipe";
 import CreateAccount from "./components/auth/CreateAccount";
 import LogIn from "./components/auth/LogIn";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   app: {
     position: "relative",
     minHeight: "100vh",
-    width: "100vw",
+    width: "100%",
     display: "flex",
     flexDirection: "column",
   },
-});
+  body: {
+    marginTop: "3.7rem",
+    marginBottom: "12rem",
+    [theme.breakpoints.down("sm")]: {
+      marginBottom: "15.3rem",
+    },
+  },
+}));
 
 function App() {
   const classes = useStyles();
@@ -33,15 +40,17 @@ function App() {
       <Router>
         <div className={classes.app}>
           <Header />
-          <Switch>
-            <Route exact path="/" component={Landing} />
-            <Route exact path="/search" component={Search} />
-            <Route exact path="/recipe/:id" component={Recipe} />
-            <Route exact path="/create" component={CreateRecipe} />
-            <Route exact path="/createaccount" component={CreateAccount} />
-            <Route exact path="/login" component={LogIn} />
-          </Switch>
-          <Footer />
+          <div className={classes.body}>
+            <Switch>
+              <Route exact path="/" component={Landing} />
+              <Route exact path="/search" component={Search} />
+              <Route exact path="/recipe/:id" component={Recipe} />
+              <Route exact path="/create" component={CreateRecipe} />
+              <Route exact path="/createaccount" component={CreateAccount} />
+              <Route exact path="/login" component={LogIn} />
+            </Switch>
+            <Footer />
+          </div>
         </div>
       </Router>
     </Provider>

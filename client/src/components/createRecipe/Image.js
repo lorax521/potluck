@@ -6,13 +6,17 @@ import { connect } from "react-redux";
 import { addImage } from "../../actions/image";
 import PropTypes from "prop-types";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   container: {
-    width: 400,
+    maxWidth: 400,
     height: 400,
     background: "#d3d3d3",
     display: "flex",
     borderRadius: "2px",
+    flex: 1,
+    [theme.breakpoints.down("sm")]: {
+      flex: "auto",
+    },
   },
   image: {
     width: 400,
@@ -36,7 +40,7 @@ const useStyles = makeStyles({
   hidden: {
     display: "none",
   },
-});
+}));
 
 const Image = ({ image, addImage }) => {
   const classes = useStyles();

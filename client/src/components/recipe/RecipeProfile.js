@@ -3,11 +3,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     justifyContent: "flex-start",
     marginBottom: "2em",
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column-reverse",
+    },
   },
   title: {
     textTransform: "capitalize",
@@ -19,6 +22,9 @@ const useStyles = makeStyles({
     objectFit: "cover",
     borderWidth: 0,
     borderRadius: "4px",
+    [theme.breakpoints.down("sm")]: {
+      width: "auto",
+    },
   },
   sectionTitle: {
     color: "#6f732f",
@@ -30,6 +36,9 @@ const useStyles = makeStyles({
     marginLeft: "5rem",
     maxWidth: "40rem",
     width: "100%",
+    [theme.breakpoints.down("sm")]: {
+      marginLeft: 0,
+    },
   },
   chips: {
     display: "flex",
@@ -49,7 +58,7 @@ const useStyles = makeStyles({
   chipLikesCount: {
     fontWeight: "bold",
   },
-});
+}));
 
 const RecipeProfile = ({ title, description, tags, image, likes }) => {
   const classes = useStyles();
@@ -66,6 +75,17 @@ const RecipeProfile = ({ title, description, tags, image, likes }) => {
     );
   };
 
+  const Likes = () => {
+    return (
+      <Fragment>
+        <p id="likes-count" className={classes.chipLikesCount}>
+          {likes ? likes.length : ""}
+        </p>
+        <FavoriteBorderIcon className={classes.chipLikes} />
+      </Fragment>
+    );
+  };
+
   return (
     <div className={classes.root}>
       <img
@@ -76,9 +96,7 @@ const RecipeProfile = ({ title, description, tags, image, likes }) => {
       <div className={classes.profileContent}>
         <h1 className={classes.title}>{title}</h1>
         <div className={classes.chips}>
-          <p className={classes.chipLikesCount}>{likes ? likes.length : ""}</p>
-          <FavoriteBorderIcon className={classes.chipLikes} />
-
+          <Likes />
           <Tags tags={tags} />
         </div>
         <h3 className={classes.sectionTitle}>Description</h3>

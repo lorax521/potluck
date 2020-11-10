@@ -9,7 +9,7 @@ import { logout } from "../../../actions/auth";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {},
   button: {
     color: "#fff",
@@ -17,8 +17,11 @@ const useStyles = makeStyles({
   icon: {
     fontSize: "1.7em",
     color: "#fff",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.5em",
+    },
   },
-});
+}));
 
 const UserButton = ({ logout }) => {
   const classes = useStyles();

@@ -9,7 +9,7 @@ import { testingredients } from "./testdata";
 const ingredients = testingredients;
 // const columns = ingredients.length();
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   servings: {
     display: "flex",
     alignItems: "center",
@@ -26,6 +26,9 @@ const useStyles = makeStyles({
   },
   category: {
     marginRight: "2.5em",
+    [theme.breakpoints.down("sm")]: {
+      margin: "0 0.5em 1em 0",
+    },
   },
   categoryTitle: {
     color: "#a1a1a1",
@@ -38,6 +41,10 @@ const useStyles = makeStyles({
   },
   ingredientsList: {
     display: "flex",
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+      width: "auto",
+    },
   },
   ingredients: {
     padding: "1.5em 0em 0em 1em",
@@ -52,7 +59,7 @@ const useStyles = makeStyles({
     listStyle: "none",
     margin: "0 1.5em 1em 0",
   },
-});
+}));
 
 const Ingredients = ({ servings, ingredients }) => {
   const classes = useStyles();
@@ -80,14 +87,16 @@ const Ingredients = ({ servings, ingredients }) => {
     );
   };
 
-  return (
-    <Fragment>
+  const Servings = () => {
+    return (
       <div className={classes.servings}>
         <TextField
           label="Servings"
           id="outlined-size-normal"
           defaultValue={servings ? servings : " "}
+          contentEditable={true}
           variant="outlined"
+          size="small"
         />
         <IconButton className={classes.iconServing} aria-label="minus">
           <RemoveCircleIcon className={classes.iconsvg} />
@@ -96,6 +105,12 @@ const Ingredients = ({ servings, ingredients }) => {
           <AddCircleIcon className={classes.iconsvg} />
         </IconButton>
       </div>
+    );
+  };
+
+  return (
+    <Fragment>
+      <Servings />
       <div className={classes.root}>
         <h3 className={classes.sectionTitle}>Ingredients</h3>
         <div className={classes.ingredientsList}>

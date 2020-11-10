@@ -13,19 +13,40 @@ import ShareIcon from "@material-ui/icons/Share";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   card: {
     width: 300,
     margin: "1rem",
+    [theme.breakpoints.down("sm")]: {
+      height: "auto",
+      width: "10em",
+    },
   },
   cardMedia: {
     height: 300,
+    [theme.breakpoints.down("sm")]: {
+      height: "12em",
+    },
+  },
+  cardTitleContainer: {
+    // position: "absolute",
+    // bottom: "-17px",
+    color: "#000",
+    margin: 0,
+    padding: 0,
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    // borderBottom: "1px solid #e9e9e9",
+    // textShadow: "1px 1px 2px #ff0000",
+    "& .MuiTypography-h5": {
+      [theme.breakpoints.down("sm")]: {
+        fontSize: "0.9em",
+        // background: "#607b7d",
+      },
+    },
   },
   cardTitle: {
-    position: "absolute",
-    bottom: "-17px",
-    color: "#fff",
-    textShadow: "1px 1px 2px #ff0000",
+    margin: "0.1em 0 0 1em",
   },
   cardActions: {
     padding: 0,
@@ -37,13 +58,31 @@ const useStyles = makeStyles({
   iconFavorite: {
     color: "#ff0000",
   },
-  iconsvg: { fontSize: "1.5rem" },
+  iconsvg: {
+    fontSize: "1em",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.7em",
+    },
+  },
   top: {
     display: "flex",
     justifyContent: "space-between",
+    [theme.breakpoints.down("sm")]: {
+      // margin: "-0.5em 0",
+      // padding: 0,
+    },
   },
   bottom: {
     display: "flex",
+    justifyContent: "space-between",
+    margin: "0 !important",
+    [theme.breakpoints.down("sm")]: {
+      // margin: "-0.7em 0",
+      // padding: 0,,
+    },
+    "& .MuiCardActions-spacing > :not(:first-child)": {
+      margin: 0,
+    },
   },
   actionContent: {
     display: "flex",
@@ -52,16 +91,33 @@ const useStyles = makeStyles({
   },
   actionContentLikes: {
     "&:first-child": {
-      margin: "0 0 0 1.5rem",
+      margin: "0 0 0 1em",
       fontWeight: "bold",
+      [theme.breakpoints.down("sm")]: {
+        fontSize: "0.9em",
+        // marginLeft: "0.5em",
+      },
     },
     "&:last-child": {
       margin: "0 0 0 0.5rem",
       textShadow: "2px 2px #ff0000",
       color: "#ff0000",
+      [theme.breakpoints.down("sm")]: {
+        fontSize: "1em",
+      },
     },
   },
-});
+  user: {
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    textAlign: "center",
+  },
+  username: {
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.8em",
+    },
+  },
+}));
 
 const RecipeCard = ({ id, title, user, image, likes }) => {
   const classes = useStyles();
@@ -88,19 +144,35 @@ const RecipeCard = ({ id, title, user, image, likes }) => {
             title={title}
           />
         </Link>
-        <CardContent className={classes.cardTitle}>
-          <Typography gutterBottom variant="h5" component="h2">
+      </CardActionArea>
+      <CardActions className={classes.cardActions}>
+        <CardContent className={classes.cardTitleContainer}>
+          <Typography
+            className={classes.cardTitle}
+            gutterBottom
+            variant="h5"
+            component="h2"
+          >
             {title}
           </Typography>
         </CardContent>
-      </CardActionArea>
-      <CardActions className={classes.cardActions}>
         <div className={classes.top}>
+          {/*
           <div className={classes.actionContent}>
             <p className={classes.actionContentLikes}>{likes}</p>
             <FavoriteBorderIcon className={classes.actionContentLikes} />
           </div>
-          <div>
+        */}
+        </div>
+        <div className={classes.bottom}>
+          <div className={classes.user}>
+            <IconButton type="user" className={classes.icon} aria-label="user">
+              <AccountCircleIcon className={classes.iconsvg} />
+            </IconButton>
+            <span className={classes.username}>{user}</span>
+          </div>
+          <div className={classes.actionContent}>
+            <p className={classes.actionContentLikes}>{likes}</p>
             <IconButton
               type="favoite"
               className={classes.iconFavorite}
@@ -108,21 +180,15 @@ const RecipeCard = ({ id, title, user, image, likes }) => {
             >
               <FavoriteIcon className={classes.iconsvg} />
             </IconButton>
-            <IconButton
-              type="share"
-              className={classes.icon}
-              aria-label="share"
-            >
-              <ShareIcon className={classes.iconsvg} />
-            </IconButton>
-          </div>
-        </div>
-        <div className={classes.bottom}>
-          <div>
-            <IconButton type="user" className={classes.icon} aria-label="user">
-              <AccountCircleIcon className={classes.iconsvg} />
-            </IconButton>
-            {user}
+            {/*
+          <IconButton
+            type="share"
+            className={classes.icon}
+            aria-label="share"
+          >
+            <ShareIcon className={classes.iconsvg} />
+          </IconButton>
+          */}
           </div>
         </div>
       </CardActions>

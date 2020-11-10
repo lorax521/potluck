@@ -1,4 +1,5 @@
 import { GET_RECIPE } from "../actions/types";
+import { setIngredients } from "../actions/ingredients";
 
 const initialState = {};
 

@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Comment from "./Comment";
-import { testcomments } from "./testdata";
 import axios from "axios";
 
 const useStyles = makeStyles({
@@ -25,38 +24,32 @@ const useStyles = makeStyles({
   },
 });
 
-const comments = testcomments;
-
-const commentComponents = [];
-
-for (const comment in comments) {
-  commentComponents.push(
-    <Comment
-      user={comments[comment].user}
-      comment={comments[comment].comment}
-    />
-  );
-}
-
 const Comments = ({ id, username }) => {
   const classes = useStyles();
   const [comments, setComments] = useState([]);
 
   const updateComments = async () => {
-    const res = await axios.get(`/api/recipes/comments/${id}`);
-    if (res.data.comments) {
-      // const resComments = [res.data];
-      const resComments = Object.keys(res.data.comments).map((comment) => (
-        <Comment
-          user={res.data.comments[comment].username}
-          comment={res.data.comments[comment].comment}
-        />
-      ));
-      setComments([...resComments]);
+    try {
+      const res = await axios.get(`/api/recipes/comments/${id}`);
+      if (res.data.comments) {
+        const resComments = Object.keys(res.data.comments).map((comment) => (
+          <Comment
+            id={res.data.comments[comment]._id}
+            userid={res.data.comments[comment].user}
+            user={res.data.comments[comment].username}
+            comment={res.data.comments[comment].comment}
+            date={res.data.comments[comment].date}
+            updateComments={updateComments}
+          />
+        ));
+        setComments([...resComments]);
+      }
+    } catch (error) {
+      console.log("cannot update comments");
     }
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     updateComments();
   }, []);
 
@@ -71,7 +64,6 @@ const Comments = ({ id, username }) => {
       { id, user, username, comment: newComment },
       headers
     );
-    console.log(res);
     document.querySelector("#new-comment").value = "";
     updateComments();
   };

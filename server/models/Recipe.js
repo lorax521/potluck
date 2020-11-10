@@ -16,8 +16,8 @@ const Schema = mongoose.Schema;
 
 const RecipeSchema = new Schema({
   user: {
-    type: String,
-    required: true,
+    type: Schema.Types.ObjectId,
+    ref: "user",
   },
   username: {
     type: String,

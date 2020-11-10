@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import TextField from "@material-ui/core/TextField";
@@ -81,6 +81,8 @@ const Category = ({
 }) => {
   const classes = useStyles();
   const inputRef = React.useRef();
+
+  useEffect(() => {}, []);
 
   const add = (e) => {
     const fieldQty = e.target.closest("li").querySelectorAll("input")[0];
@@ -178,11 +180,11 @@ Category.propTypes = {
   editCategory: PropTypes.func.isRequired,
   removeCategory: PropTypes.func.isRequired,
   addIngredient: PropTypes.func.isRequired,
-  ingredients: PropTypes.object.isRequired,
+  // ingredients: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  ingredients: state.ingredients,
+  // ingredients: state.ingredients,
 });
 
 export default connect(mapStateToProps, {

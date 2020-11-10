@@ -7,25 +7,28 @@ import PeopleIcon from "@material-ui/icons/People";
 import FindInPageIcon from "@material-ui/icons/FindInPage";
 import RestaurantIcon from "@material-ui/icons/Restaurant";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   container: {
     padding: "1rem 5rem",
     maxWidth: "50rem",
-    margin: "auto"
+    margin: "auto",
+    [theme.breakpoints.down("sm")]: {
+      padding: "1em",
+    },
   },
   img: {
     minWidth: "100vw",
     maxHeight: "400px",
-    objectFit: "cover"
+    objectFit: "cover",
   },
   description: {
-    fontSize: "1.5rem"
+    fontSize: "1.5rem",
   },
   sections: {
     display: "flex",
     flexFlow: "row wrap",
     margin: "auto",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   section: {
     width: "20rem",
@@ -34,18 +37,18 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
-    minHeight: "11rem"
+    minHeight: "11rem",
   },
   btn: {
     fontWeight: "bold",
     color: "#fff",
-    background: "#46acc2"
+    background: "#46acc2",
   },
   icon: {
     color: "#757575",
-    fontSize: "3rem"
-  }
-});
+    fontSize: "3rem",
+  },
+}));
 
 const Landing = () => {
   const classes = useStyles();

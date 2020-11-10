@@ -151,13 +151,13 @@ router.post("/", upload.single("file"), async (req, res) => {
   }
 });
 
-// @route           POST api/recipes/like
+// @route           POST api/recipes/like/:id
 // @description     Like/unlike a recipe
 // @access          Private
-router.post("/like", auth, async (req, res) => {
+router.post("/like/:id", auth, async (req, res) => {
   try {
-    const { id } = req.body;
-    const recipe = await Recipe.findOne({ _id: id });
+    const id = req.params.id;
+    const recipe = await Recipe.findById(id);
     userid = req.user.id;
     const index = recipe.likes.indexOf(userid);
     index === -1 ? recipe.likes.push(userid) : recipe.likes.splice(index, 1);
@@ -274,6 +274,29 @@ router.delete("/:id", auth, async (req, res) => {
       const recipeid = recipe.id;
       await Recipe.findOneAndRemove({ _id: recipeid });
       res.json({ msg: "Recipe successfully deleted" });
+    } else {
+      res.json({ msg: "User not authorized" });
+    }
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error");
+  }
+});
+
+// @route           DELETE api/recipes/comments/:id
+// @description     Delete comment by id
+// @access          Private
+router.delete("/comments/:id", auth, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const comment = await Comment.findById(id);
+    if (!comment) {
+      return res.status(404).json({ msg: "Recipe not found" });
+    }
+    if (comment.user == req.user.id) {
+      const commentid = comment.id;
+      await Comment.findOneAndRemove({ _id: commentid });
+      res.json({ msg: "Comment successfully deleted" });
     } else {
       res.json({ msg: "User not authorized" });
     }
